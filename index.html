@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aadhaar Seeding & DBT Awareness Portal</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lottie Player for animations -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-light: #60a5fa;
+            --background-light: #f0f4f8; /* Slightly bluer background */
+            --text-dark: #111827;
+            --text-light: #374151;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-light));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(37, 99, 235, 0.3);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.6, 0.2, 0.1, 1), transform 0.8s cubic-bezier(0.6, 0.2, 0.1, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quiz-option {
+            transition: all 0.2s ease-in-out;
+        }
+        .quiz-option:hover {
+            transform: scale(1.02);
+            background-color: #e0f2fe;
+        }
+        .quiz-option.correct {
+            background-color: #22c55e;
+            color: white;
+            border-color: #16a34a;
+        }
+        .quiz-option.incorrect {
+            background-color: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+        .accordion-header {
+            transition: background-color 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg fixed w-full z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                Aadhaar Aware
+            </a>
+            <div class="hidden md:flex space-x-8 items-center" id="desktop-menu">
+                <a href="#importance" class="text-gray-600 hover:text-blue-600 transition font-medium">Why it Matters</a>
+                <a href="#checker" class="text-gray-600 hover:text-blue-600 transition font-medium">Status Checker</a>
+                <a href="#tutorial" class="text-gray-600 hover:text-blue-600 transition font-medium">Tutorials</a>
+                <a href="#quiz" class="text-gray-600 hover:text-blue-600 transition font-medium">Quiz Zone</a>
+                <a href="#faq" class="text-gray-600 hover:text-blue-600 transition font-medium">FAQ</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden z-50">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col space-y-2">
+             <a href="#importance" class="block py-2 text-gray-600 hover:text-blue-600 transition nav-link">Why it Matters</a>
+             <a href="#checker" class="block py-2 text-gray-600 hover:text-blue-600 transition nav-link">Status Checker</a>
+             <a href="#tutorial" class="block py-2 text-gray-600 hover:text-blue-600 transition nav-link">Tutorials</a>
+             <a href="#quiz" class="block py-2 text-gray-600 hover:text-blue-600 transition nav-link">Quiz Zone</a>
+             <a href="#faq" class="block py-2 text-gray-600 hover:text-blue-600 transition nav-link">FAQ</a>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="hero-gradient relative overflow-hidden">
+            <div id="particles-js"></div>
+            <div class="container mx-auto px-6 py-28 text-center hero-content">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-4">
+                    From Linking to Receiving:
+                    <br class="hidden md:block">
+                    <span class="text-blue-600">Mastering Aadhaar & DBT for Your Benefits</span>
+                </h1>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                    This portal clarifies the crucial difference between simple Aadhaar Seeding and a DBT-enabled account, empowering students and citizens to receive government benefits seamlessly.
+                </p>
+                <a href="#importance" class="btn-primary text-white font-bold py-3 px-8 rounded-full inline-flex items-center">
+                    Learn the Difference
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 h-5 w-5"><line x1="12" x2="12" y1="5" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Importance Section -->
+        <section id="importance" class="py-24 bg-white reveal">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">The Two Critical Steps to Your Benefits</h2>
+                    <p class="text-gray-600 mt-3 max-w-2xl mx-auto">One is about identity, the other is about receiving money. Getting both right is essential.</p>
+                </div>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-slate-50 p-8 rounded-2xl shadow-md border border-gray-100">
+                        <div class="flex items-center text-blue-600 mb-4">
+                            <span class="bg-blue-100 p-3 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg></span>
+                            <h3 class="ml-4 text-2xl font-bold text-blue-800">Step 1: Aadhaar Seeding</h3>
+                        </div>
+                        <p class="text-gray-700">This is the foundational step of linking your 12-digit Aadhaar to your bank account. It acts as a primary KYC, confirming your identity with the bank. Multiple accounts can be seeded.</p>
+                    </div>
+                     <div class="bg-slate-50 p-8 rounded-2xl shadow-md border border-gray-100">
+                        <div class="flex items-center text-green-600 mb-4">
+                            <span class="bg-green-100 p-3 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 12 4 10 1.3-4.3-4.3-1.3 10 4-3.48-10.37"/><path d="m12 12-4-10-1.3 4.3 4.3 1.3-10-4 3.48 10.37"/></svg></span>
+                            <h3 class="ml-4 text-2xl font-bold text-green-800">Step 2: DBT Enablement</h3>
+                        </div>
+                        <p class="text-gray-700">This is the crucial action where you authorize ONE specific account to receive all government benefits. The NPCI mapper is updated, directing all payments to this single, chosen account.</p>
+                    </div>
+                </div>
+                 <div class="mt-16 grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Advantages -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border">
+                        <div class="flex items-center mb-3">
+                            <div class="bg-green-100 p-2 rounded-full mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600 h-6 w-6"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a2 2 0 0 1 1.79 1.11L15 5.88Z"/></svg></div>
+                            <h4 class="font-bold text-lg text-green-800">Why It's Great</h4>
+                        </div>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Direct, fast benefit transfers</li>
+                            <li>Eliminates middlemen & corruption</li>
+                            <li>Secure and highly transparent process</li>
+                            <li>A single account for all government schemes</li>
+                        </ul>
+                    </div>
+                    <!-- Disadvantages -->
+                     <div class="bg-white p-6 rounded-xl shadow-lg border">
+                        <div class="flex items-center mb-3">
+                            <div class="bg-red-100 p-2 rounded-full mr-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600 h-6 w-6"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a2 2 0 0 1-1.79-1.11L9 18.12Z"/></svg></div>
+                            <h4 class="font-bold text-lg text-red-800">Common Pitfalls</h4>
+                        </div>
+                        <ul class="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Benefits may go to an unintended account</li>
+                            <li>An inactive Aadhaar can halt all payments</li>
+                            <li>Lack of awareness leads to confusion</li>
+                            <li>Bank processes can sometimes be slow</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Status Checker Section -->
+        <section id="checker" class="py-24 bg-slate-100 reveal">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Simulated Status Check</h2>
+                    <p class="text-gray-600 mt-3 max-w-2xl mx-auto">See how it works. This tool mimics the official check to help you understand the results. <br><span class="text-sm font-semibold text-red-500">(This is a demonstration and does not use real data.)</span></p>
+                </div>
+                <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border">
+                    <form id="status-form" class="space-y-6">
+                        <div>
+                            <label for="aadhaar" class="font-medium text-gray-700">Aadhaar Number</label>
+                            <div class="relative mt-1">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                                <input type="text" id="aadhaar" placeholder="xxxx xxxx xxxx" class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition" maxlength="14" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="bank" class="font-medium text-gray-700">Bank Account Number</label>
+                            <div class="relative mt-1">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 21 18-0"/><path d="M11 3 3 11v9h18v-9L13 3"/><path d="M12 21V11"/><path d="M12 3v-1"/></svg></span>
+                                <input type="text" id="bank" placeholder="Enter your bank account number" class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full btn-primary text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center text-lg">
+                            <span id="btn-text">Check Status</span>
+                            <div id="loader" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </form>
+                    <div id="status-result" class="mt-8 opacity-0 transform scale-95"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tutorial Hub Section -->
+        <section id="tutorial" class="py-24 bg-white reveal">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">How to Get it Done: A Simple Guide</h2>
+                    <p class="text-gray-600 mt-3 max-w-2xl mx-auto">Follow these official methods to link your Aadhaar and enable DBT.</p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <!-- Tutorial Items here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Zone Section -->
+        <section id="quiz" class="py-24 bg-slate-100 reveal">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Test Your Knowledge!</h2>
+                    <p class="text-gray-600 mt-3 max-w-2xl mx-auto">Take this quick quiz to see how much you've learned. You'll get 10 random questions each time.</p>
+                </div>
+                <div id="quiz-container" class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-2xl border">
+                    <!-- Quiz content will be injected here by JS -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- FAQ Section -->
+        <section id="faq" class="py-24 bg-white reveal">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Frequently Asked Questions</h2>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <!-- FAQ Items here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-10 text-center">
+            <p>&copy; 2024 Aadhaar Aware. A conceptual project for SIH. Not affiliated with any government body.</p>
+            <p class="text-sm text-gray-400 mt-2">Designed to promote digital literacy and financial inclusion.</p>
+             <p>Made By- Team Hexavators.</p>
+        </div>
+    </footer>
+    
+    <!-- Particles.js for background animation -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script>
+    window.onload = function() {
+
+        // Particles.js configuration
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#2563eb" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": false, "anim": { "enable": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": false } },
+                "line_linked": { "enable": true, "distance": 150, "color": "#60a5fa", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => observer.observe(el));
+        
+        // Dynamic Accordion Creation for Tutorials and FAQ
+        const tutorialData = [
+            { title: "Check Status on Official Website", content: "You can check your Aadhaar and bank account linking status directly on the UIDAI website.<ol class='list-decimal list-inside space-y-2 pl-4 mt-2'><li>Visit the official UIDAI website's 'Check Aadhaar/Bank Linking Status' page.</li><li>Enter your 12-digit Aadhaar number and the security code.</li><li>Click on 'Send OTP'. You will receive an OTP on your registered mobile number.</li><li>Enter the OTP and click 'Submit'. The status will be displayed on the screen.</li></ol><a href='https://resident.uidai.gov.in/bank-mapper' target='_blank' class='inline-flex items-center mt-3 text-blue-600 font-semibold hover:underline'>Go to UIDAI Website <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='ml-1'><path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/><polyline points='15 3 21 3 21 9'/><line x1='10' x2='21' y1='14' y2='3'/></svg></a>" },
+            { title: "Enable DBT via Net Banking", content: "Most major banks allow you to seed your Aadhaar and enable DBT through their internet banking portals.<ol class='list-decimal list-inside space-y-2 pl-4 mt-2'><li>Log in to your bank's net banking portal.</li><li>Navigate to the 'Aadhaar Seeding' or 'e-Services' section.</li><li>Select the account you wish to link and enable for DBT.</li><li>Enter your Aadhaar number and confirm.</li><li>Authenticate using an OTP sent to your mobile number. The bank will process your request in 2-3 working days.</li></ol>" },
+            { title: "Enable DBT at a Bank Branch (Offline)", content: "If you prefer an offline method, you can visit your bank branch in person.<ol class='list-decimal list-inside space-y-2 pl-4 mt-2'><li>Visit your bank branch where you have an account.</li><li>Ask for the 'Aadhaar Seeding and DBT Consent Form'.</li><li>Fill out the form with your account details and Aadhaar number. Ensure you tick the box for enabling DBT/NPCI Mapping.</li><li>Attach a self-attested copy of your Aadhaar card.</li><li>Submit the form to the bank official. You will receive an acknowledgement slip.</li></ol>" }
+        ];
+
+        const faqData = [
+            { title: "Can I link one Aadhaar to multiple bank accounts?", content: "Yes, you can link (seed) your Aadhaar to multiple bank accounts. However, you can only enable DBT for ONE of those accounts at a time. This single account will be used to receive all government benefits." },
+            { title: "How do I change my DBT-linked bank account?", content: "To change your DBT-linked account, you need to submit a new Aadhaar Seeding and DBT Consent Form at the bank branch of the NEW account you want to receive benefits in. Once they update it in the NPCI mapper, the old one will be automatically de-linked for DBT." },
+            { title: "What happens if my Aadhaar is inactive?", content: "If your Aadhaar becomes inactive, it can disrupt your DBT payments. It's important to keep your Aadhaar active by using it for authentication (like biometrics or OTP) at least once every few years and keeping your mobile number updated." }
+        ];
+
+        function createAccordion(containerSelector, data) {
+            const container = document.querySelector(containerSelector);
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <div class="border-b">
+                        <button class="accordion-header w-full text-left py-5 px-6 flex justify-between items-center text-lg font-semibold hover:bg-gray-50">
+                            <span>${item.title}</span>
+                            <span class="accordion-icon transition-transform duration-300 h-5 w-5 shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                        </button>
+                        <div class="accordion-content overflow-hidden max-h-0 transition-all duration-500 ease-in-out px-6">
+                            <div class="py-4 text-gray-600">${item.content}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        createAccordion('#tutorial .max-w-4xl', tutorialData);
+        createAccordion('#faq .max-w-4xl', faqData);
+
+        document.querySelectorAll('.accordion-header').forEach(accordion => {
+            accordion.addEventListener('click', (e) => {
+                const content = accordion.nextElementSibling;
+                const icon = accordion.querySelector('.accordion-icon');
+                const isOpen = content.style.maxHeight;
+                const parent = e.target.closest('.max-w-4xl');
+
+                parent.querySelectorAll('.accordion-content').forEach(c => { if (c !== content) c.style.maxHeight = null; });
+                parent.querySelectorAll('.accordion-icon').forEach(i => { if (i !== icon) i.classList.remove('rotate-180'); });
+                
+                if (isOpen) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('rotate-180');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add('rotate-180');
+                }
+            });
+        });
+
+
+        // Aadhaar input formatting
+        const aadhaarInput = document.getElementById('aadhaar');
+        aadhaarInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            e.target.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        });
+
+        // Status Checker Form Logic (remains the same)
+        const statusForm = document.getElementById('status-form');
+        statusForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const loader = document.getElementById('loader');
+            const btnText = document.getElementById('btn-text');
+            const statusResult = document.getElementById('status-result');
+
+            loader.classList.remove('hidden');
+            btnText.innerText = 'Checking...';
+            statusResult.innerHTML = '';
+            statusResult.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                btnText.innerText = 'Check Status';
+
+                const aadhaarValue = aadhaarInput.value.replace(/\s/g, '');
+                const lastDigit = parseInt(aadhaarValue.slice(-1));
+                let resultHTML = '', iconSVG = '';
+
+                if (isNaN(lastDigit) || aadhaarValue.length !== 12) {
+                    iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-red-600 mr-4 shrink-0"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`;
+                    resultHTML = `<div class="p-6 rounded-lg bg-red-100 border border-red-300 flex items-center">${iconSVG}<div><h4 class="font-bold text-lg text-red-800">Invalid Input</h4><p class="text-red-700">Please enter a valid 12-digit Aadhaar number.</p></div></div>`;
+                } else if (lastDigit <= 4) { // Success
+                    iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-green-600 mr-4 shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+                    resultHTML = `<div class="p-6 rounded-lg bg-green-100 border border-green-300 flex items-center">${iconSVG}<div><h4 class="font-bold text-lg text-green-800">Status: Active & Enabled</h4><p class="text-green-700">Congratulations! Your Aadhaar is linked and your account is enabled for DBT.</p></div></div>`;
+                } else if (lastDigit <= 7) { // Warning
+                    iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-yellow-600 mr-4 shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`;
+                    resultHTML = `<div class="p-6 rounded-lg bg-yellow-100 border border-yellow-300 flex items-center">${iconSVG}<div><h4 class="font-bold text-lg text-yellow-800">Status: Action Required</h4><p class="text-yellow-700">Your Aadhaar is linked, but DBT is not enabled. Please visit your bank branch to enable it.</p></div></div>`;
+                } else { // Error
+                    iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 text-red-600 mr-4 shrink-0"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg>`;
+                    resultHTML = `<div class="p-6 rounded-lg bg-red-100 border border-red-300 flex items-center">${iconSVG}<div><h4 class="font-bold text-lg text-red-800">Status: Not Linked</h4><p class="text-red-700">Your Aadhaar is not linked to this bank account. Please follow our tutorials.</p></div></div>`;
+                }
+                
+                statusResult.innerHTML = resultHTML;
+                statusResult.classList.remove('opacity-0', 'scale-95');
+            }, 1000);
+        });
+        
+        // Quiz functionality
+        const quizContainer = document.getElementById('quiz-container');
+        const quizBank = [
+            { question: "What does UIDAI stand for?", options: ["Urban Identity Development Authority", "Unique Identification Authority of India", "Universal Identity Department", "Union Information Database"], answer: "Unique Identification Authority of India" },
+            { question: "How many digits are in an Aadhaar number?", options: ["10", "16", "12", "8"], answer: "12" },
+            { question: "What is the primary purpose of DBT?", options: ["Digital Bank Transfer", "Direct Brokerage Transfer", "Data Backup Transfer", "Direct Benefit Transfer"], answer: "Direct Benefit Transfer" },
+            { question: "Can you link your Aadhaar to multiple bank accounts?", options: ["No, only one is allowed", "Yes, without any limit", "Only up to three", "Only with private banks"], answer: "Yes, without any limit" },
+            { question: "How many bank accounts can receive DBT payments at one time?", options: ["Two", "All linked accounts", "Only one", "None"], answer: "Only one" },
+            { question: "What is the role of the NPCI Mapper?", options: ["To print Aadhaar cards", "To link DBT to a specific bank account", "To track bank holidays", "To approve loans"], answer: "To link DBT to a specific bank account" },
+            { question: "Is it mandatory to link Aadhaar with a bank account to receive government subsidies?", options: ["No, it's optional", "Only for farmers", "Yes, it is mandatory", "Only for senior citizens"], answer: "Yes, it is mandatory" },
+            { question: "What does 'V' in VID (Aadhaar VID) stand for?", options: ["Verified", "Virtual", "Validated", "Vital"], answer: "Virtual" },
+            { question: "A 16-digit VID is a temporary, revocable substitute for what?", options: ["PAN Number", "Bank Account Number", "Aadhaar Number", "Mobile Number"], answer: "Aadhaar Number" },
+            { question: "How can you update your mobile number in your Aadhaar details?", options: ["Online via OTP", "By sending an email", "By visiting an Aadhaar Enrolment Center", "Through your bank's app"], answer: "By visiting an Aadhaar Enrolment Center" },
+            { question: "What is 'Masked Aadhaar'?", options: ["An Aadhaar card with a photo", "An invalid Aadhaar", "An Aadhaar copy showing only the last 4 digits", "A laminated Aadhaar card"], answer: "An Aadhaar copy showing only the last 4 digits" },
+            { question: "Which of these is a major DBT scheme for farmers?", options: ["MGNREGA", "PM-KISAN", "Swachh Bharat", "Ayushman Bharat"], answer: "PM-KISAN" },
+            { question: "What should you do if you receive an SMS asking for your Aadhaar OTP?", options: ["Share it immediately", "Reply with your name", "Ignore and never share it", "Call the sender back"], answer: "Ignore and never share it" },
+            { question: "The process of linking Aadhaar to a financial account is often called:", options: ["Merging", "Seeding", "Attaching", "Syncing"], answer: "Seeding" },
+            { question: "What color is the 'Baal Aadhaar' issued to children below 5 years?", options: ["Red", "Green", "Yellow", "Blue"], answer: "Blue" },
+            { question: "Which organization manages the technological backbone of DBT in India?", options: ["Reserve Bank of India", "Ministry of Finance", "NPCI", "SEBI"], answer: "NPCI" },
+            { question: "What does NPCI stand for?", options: ["National Payments Corporation of India", "New Pension Control of India", "National Programming Council", "Non-Profit Corporation of India"], answer: "National Payments Corporation of India" },
+            { question: "What is the safest way to share your Aadhaar card photocopy?", options: ["Share it as is", "Sign on it", "Write the purpose and date on it", "Laminate it first"], answer: "Write the purpose and date on it" },
+            { question: "The 'JAM Trinity' for DBT refers to Jan Dhan, Aadhaar, and...?", options: ["Money", "Market", "Mobile", "Merchant"], answer: "Mobile" },
+            { question: "What is the toll-free helpline number for Aadhaar-related queries?", options: ["100", "1947", "1800-11-2211", "155255"], answer: "1947" },
+            { question: "What is e-Aadhaar?", options: ["An Aadhaar card for email purposes", "A duplicate Aadhaar card", "A password-protected electronic copy of Aadhaar", "A foreign Aadhaar card"], answer: "A password-protected electronic copy of Aadhaar" },
+            { question: "What is the password to open your e-Aadhaar PDF?", options: ["Your mobile number", "First 4 letters of name (CAPS) + YYYY of birth", "Your full name", "Your PIN code"], answer: "First 4 letters of name (CAPS) + YYYY of birth" },
+            { question: "If you have two Aadhaar-linked accounts, which one gets the DBT money?", options: ["The one with more balance", "The oldest account", "The one most recently mapped with NPCI", "Both get 50%"], answer: "The one most recently mapped with NPCI" },
+            { question: "What is the main advantage of DBT for beneficiaries?", options: ["Get more money", "Reduces corruption and delays", "No need for a bank account", "Get cash at home"], answer: "Reduces corruption and delays" },
+            { question: "Which of these is NOT a biometric identifier used for Aadhaar?", options: ["Fingerprints", "Iris Scan", "Photograph", "Signature"], answer: "Signature" },
+            { question: "Is it possible for one person to have two Aadhaar numbers?", options: ["Yes, if they have two addresses", "Yes, if they apply twice", "No, it is illegal", "Yes, for business and personal use"], answer: "No, it is illegal" },
+            { question: "How often should an adult ideally get their biometrics updated in Aadhaar?", options: ["Every year", "Every 10 years", "Only once in a lifetime", "Every 2 years"], answer: "Every 10 years" },
+            { question: "What is the official mobile app for Aadhaar services from UIDAI?", options: ["DigiLocker", "UMANG", "mAadhaar", "MyGov"], answer: "mAadhaar" },
+            { question: "Can an NRI (Non-Resident Indian) apply for an Aadhaar Card?", options: ["Yes, easily", "Only if they have an Indian passport", "No, Aadhaar is for residents of India", "Yes, by paying a fee"], answer: "No, Aadhaar is for residents of India" },
+            { question: "What is KYC?", options: ["Know Your Cash", "Keep Your Card", "Know Your Customer", "Keep Your Code"], answer: "Know Your Customer" },
+            { question: "At what ages are mandatory biometric updates for children required?", options: ["Age 10 and 20", "Age 5 and 15", "Age 8 and 18", "Only at age 18"], answer: "Age 5 and 15" },
+            { question: "Which of these details can you update online in Aadhaar if your mobile is linked?", options: ["Name", "Date of Birth", "Address", "Gender"], answer: "Address" },
+            { question: "The Aadhaar authentication history service on the UIDAI website shows what?", options: ["Your bank balance", "When and where your Aadhaar was used for authentication", "Your family details", "Your credit score"], answer: "When and where your Aadhaar was used for authentication" },
+            { question: "What is the fee for a mandatory biometric update for a child?", options: ["Rs. 100", "Rs. 50", "Free", "Rs. 200"], answer: "Free" },
+            { question: "What is the purpose of the 'Aadhaar Lock/Unlock' feature?", options: ["To prevent bank withdrawals", "To secure your biometrics from misuse", "To block your mobile SIM", "To stop DBT payments"], answer: "To secure your biometrics from misuse" },
+            { question: "Which of these is a benefit of Aadhaar seeding for the government?", options: ["Increases tax collection", "Reduces fake and ghost beneficiaries", "Tracks citizen location", "Monitors spending habits"], answer: "Reduces fake and ghost beneficiaries" },
+            { question: "To receive your LPG subsidy, your bank account must be...", options: ["A current account", "Linked to your Gas agency ID", "Linked with Aadhaar", "A zero-balance account"], answer: "Linked with Aadhaar" },
+            { question: "What is the primary identity document for Aadhaar enrollment?", options: ["Proof of Identity (PoI) and Proof of Address (PoA)", "Ration Card only", "Passport only", "Driving License only"], answer: "Proof of Identity (PoI) and Proof of Address (PoA)" },
+            { question: "If DBT payment fails, whom should you contact first?", options: ["UIDAI office", "Your bank branch", "The police station", "The concerned government department"], answer: "Your bank branch" },
+            { question: "Can you use your Enrollment ID (EID) slip to check Aadhaar generation status?", options: ["No, you must wait for the SMS", "Only after 30 days", "Yes, on the UIDAI website", "No, EID is only for records"], answer: "Yes, on the UIDAI website" },
+            { question: "What does 'authentication' mean in the context of Aadhaar?", options: ["The process of creating Aadhaar", "The process of verifying a resident's identity", "The process of updating Aadhaar", "The process of printing Aadhaar"], answer: "The process of verifying a resident's identity" },
+            { question: "Can you download your e-Aadhaar if you've lost your mobile number?", options: ["Yes, using your email", "No, a registered mobile number is essential for OTP", "Yes, using biometrics at a bank", "Yes, by answering security questions"], answer: "No, a registered mobile number is essential for OTP" },
+            { question: "Aadhaar is a proof of ____, not a proof of ____.", options: ["Income, Address", "Identity, Citizenship", "Age, Identity", "Citizenship, Residence"], answer: "Identity, Citizenship" },
+            { question: "The PAHAL scheme is related to the DBT of which subsidy?", options: ["Fertilizer subsidy", "Food subsidy", "LPG subsidy", "Electricity subsidy"], answer: "LPG subsidy" },
+            { question: "Is it possible to voluntarily give up your Aadhaar number?", options: ["Yes, by writing to UIDAI", "Only if you are leaving India", "No, there is no provision to surrender Aadhaar", "Yes, at any Aadhaar center"], answer: "No, there is no provision to surrender Aadhaar" },
+            { question: "What is the validity of an Aadhaar card?", options: ["10 years", "5 years", "Valid for life", "Until the age of 60"], answer: "Valid for life" },
+            { question: "Which Aadhaar service can be availed via SMS?", options: ["Address update", "VID Generation/Retrieval", "Biometric locking", "All of the above"], answer: "VID Generation/Retrieval" },
+            { question: "Which part of your Aadhaar data is considered 'sensitive' and not shared without consent?", options: ["Name and Address", "Biometric Information", "Date of Birth", "Aadhaar Number"], answer: "Biometric Information" },
+            { question: "If you change your address, how many days do you have to update it in Aadhaar?", options: ["30 days", "There is no strict deadline, but it's recommended to do it soon", "90 days", "7 days"], answer: "There is no strict deadline, but it's recommended to do it soon" },
+            { question: "What is the primary benefit of using a Virtual ID (VID)?", options: ["It looks better than Aadhaar number", "It prevents sharing of your actual Aadhaar number", "It gives you a discount", "It is easier to remember"], answer: "It prevents sharing of your actual Aadhaar number" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let currentQuizData = [];
+
+        function startQuiz() {
+            const shuffled = quizBank.sort(() => 0.5 - Math.random());
+            currentQuizData = shuffled.slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuiz();
+        }
+
+        function loadQuiz() {
+            if (currentQuestionIndex < currentQuizData.length) {
+                const currentQuestion = currentQuizData[currentQuestionIndex];
+                quizContainer.innerHTML = `
+                    <div class="mb-4">
+                        <p class="text-gray-500 font-medium">Question ${currentQuestionIndex + 1} of ${currentQuizData.length}</p>
+                        <h3 class="text-xl font-bold mt-1">${currentQuestion.question}</h3>
+                    </div>
+                    <div id="options-container" class="space-y-3 mt-6">
+                        ${currentQuestion.options.map(option => `<button class="quiz-option w-full text-left p-4 border-2 border-gray-200 rounded-lg font-medium">${option}</button>`).join('')}
+                    </div>
+                    <div id="feedback" class="mt-4 min-h-[24px]"></div>
+                    <button id="next-btn" class="hidden mt-6 w-full btn-primary text-white font-bold py-3 px-6 rounded-lg">Next Question</button>
+                `;
+                quizContainer.querySelectorAll('.quiz-option').forEach(option => {
+                    option.addEventListener('click', () => selectAnswer(option, currentQuestion.answer));
+                });
+            } else {
+                showResults();
+            }
+        }
+
+        function selectAnswer(selectedOption, correctAnswer) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.disabled = true;
+                if(opt.innerText === correctAnswer) opt.classList.add('correct');
+                else if (opt === selectedOption) opt.classList.add('incorrect');
+            });
+
+            if(selectedOption.innerText === correctAnswer) {
+                score++;
+                document.getElementById('feedback').innerHTML = `<p class="text-green-600 font-semibold">Correct!</p>`;
+            } else {
+                document.getElementById('feedback').innerHTML = `<p class="text-red-600 font-semibold">Correct Answer: ${correctAnswer}</p>`;
+            }
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.remove('hidden');
+            if (currentQuestionIndex === currentQuizData.length - 1) nextBtn.innerText = 'Show Results';
+            nextBtn.onclick = () => { currentQuestionIndex++; loadQuiz(); };
+        }
+
+        function showResults() {
+             quizContainer.innerHTML = `
+                <div class="text-center">
+                     <h3 class="text-2xl font-bold mb-4">Quiz Complete!</h3>
+                     <p class="text-lg">You scored <span class="font-bold text-blue-600">${score}</span> out of <span class="font-bold text-blue-600">${currentQuizData.length}</span>.</p>
+                     <lottie-player src="https://lottie.host/86d795b5-7489-4217-a164-325d742fcd2e/v64qDk8y3A.json" background="transparent" speed="1" style="width: 200px; height: 200px; margin: 0 auto;" loop autoplay></lottie-player>
+                     <button id="restart-btn" class="mt-6 btn-primary text-white font-bold py-3 px-8 rounded-full">Try Again</button>
+                </div>`;
+            document.getElementById('restart-btn').onclick = startQuiz;
+        }
+        
+        startQuiz();
+    };
+    </script>
+</body>
+</html>
+
